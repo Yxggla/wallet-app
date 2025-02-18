@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { ScrollView, TouchableOpacity, View, Text, Image } from "react-native";
+import {
+	ScrollView,
+	TouchableOpacity,
+	View,
+	Text,
+	Image,
+	Linking,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { styled } from "nativewind";
@@ -461,11 +468,12 @@ export default function DocsScreen() {
 							<StyledTouchableOpacity
 								key={card.id}
 								className="mb-4 bg-[#2A2B2D] rounded-xl overflow-hidden"
+								onPress={() => card.url && Linking.openURL(card.url)}
 							>
 								<StyledView className="flex-row h-40">
 									{/* 左侧文字 */}
 									<StyledView className="flex-1 p-6 justify-center">
-										<StyledText className="text-white text-2xl font-medium">
+										<StyledText className="text-white text-xl font-medium">
 											{card.title}
 										</StyledText>
 									</StyledView>

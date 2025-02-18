@@ -22,6 +22,7 @@ interface HotApp {
 interface KnowledgeCard {
 	id: number;
 	title: string;
+	url: string;
   }
 
 const hotApps: HotApp[] = [
@@ -176,22 +177,27 @@ const formatNumber = (num: number): string => {
 	{
 	  id: 1,
 	  title: "What is an embedded wallet?",
+	  url: "https://phantom.app/learn/crypto-101/embedded-wallets?utm_source=phantom&utm_medium=learn"
 	},
 	{
 	  id: 2,
 	  title: "What is a crypto bridge?",
+	  url: "https://phantom.com/learn/crypto-101/crypto-bridge?utm_source=phantom&utm_medium=learn"
 	},
 	{
 	  id: 3,
 	  title: "What is Staking?",
+	  url: "https://phantom.app/learn/crypto-101/what-is-staking?utm_source=phantom&utm_medium=learn"
 	},
 	{
 	  id: 4,
-	  title: "What is DeFi?",
+	  title: "A beginner's guide to Solana",
+	  url: "https://phantom.app/learn/crypto-101/a-beginner-s-guide-to-solana?utm_source=phantom&utm_medium=learn"
 	},
 	{
 	  id: 5,
-	  title: "What is NFT?",
+	  title: "A beginner's guide to Bitcoin",
+	  url: "https://phantom.com/learn/crypto-101/bitcoin-guide?utm_source=phantom&utm_medium=learn"
 	}
   ];
 export {
