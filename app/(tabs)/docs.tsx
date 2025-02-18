@@ -13,6 +13,7 @@ import {
 	networkOptions,
 	volumeOptions,
 	formatNumber,
+	knowledgeCards,
 } from "@/assets/data/docs-data";
 
 const StyledView = styled(View);
@@ -407,29 +408,81 @@ export default function DocsScreen() {
 
 				{selectedCategory === "tasks" && (
 					<StyledView className="mt-4">
-						{/* 任务列表 */}
 						{tasks.map((task) => (
-							<StyledView
+							<StyledTouchableOpacity
 								key={task.id}
-								className="mb-4 bg-[#2A2B2D] p-4 rounded-xl"
+								className="mb-4 bg-[#2A2B2D] overflow-hidden rounded-xl"
 							>
-								<StyledText className="text-white text-lg">
-									{task.title}
-								</StyledText>
-								<StyledText className="text-[#687076] mt-2">
-									{task.description}
-								</StyledText>
-							</StyledView>
+								{/* 任务卡片背景图 */}
+								<Image
+									source={{
+										uri: `https://picsum.photos/id/${task.id}/400/200`,
+									}}
+									className="w-full h-40"
+									resizeMode="cover"
+								/>
+
+								{/* 剩余时间标签 */}
+								<StyledView className="absolute top-4 right-4 bg-black/60 px-3 py-1 rounded-full">
+									<StyledText className="text-white">
+										剩余{task.daysLeft} 天
+									</StyledText>
+								</StyledView>
+
+								{/* 任务信息 */}
+								<StyledView className="p-4">
+									<StyledText className="text-white text-xl font-medium mb-2">
+										{task.title}
+									</StyledText>
+									<StyledText className="text-[#687076] mb-4">
+										{task.description}
+									</StyledText>
+
+									{/* 奖励信息 */}
+									<StyledView className="flex-row items-center">
+										<StyledView className="w-8 h-8 bg-[#35363A] rounded-lg items-center justify-center mr-2">
+											<StyledText className="text-xl">🎁</StyledText>
+										</StyledView>
+										<StyledText className="text-[#687076]">奖励</StyledText>
+										<StyledText className="text-white ml-2">
+											{task.reward}
+										</StyledText>
+									</StyledView>
+								</StyledView>
+							</StyledTouchableOpacity>
 						))}
 					</StyledView>
 				)}
 
 				{selectedCategory === "about" && (
-					<StyledView className="mt-4 p-4">
-						<StyledText className="text-white text-lg">关于我们</StyledText>
-						<StyledText className="text-[#687076] mt-2">
-							这里是关于页面的内容...
-						</StyledText>
+					<StyledView className="mt-4">
+						{/* 知识卡片列表 */}
+						{knowledgeCards.map((card) => (
+							<StyledTouchableOpacity
+								key={card.id}
+								className="mb-4 bg-[#2A2B2D] rounded-xl overflow-hidden"
+							>
+								<StyledView className="flex-row h-40">
+									{/* 左侧文字 */}
+									<StyledView className="flex-1 p-6 justify-center">
+										<StyledText className="text-white text-2xl font-medium">
+											{card.title}
+										</StyledText>
+									</StyledView>
+
+									{/* 右侧图片 */}
+									<StyledView className="w-1/2">
+										<Image
+											source={{
+												uri: `https://picsum.photos/id/${card.id}/400/200`,
+											}}
+											className="w-full h-40"
+											resizeMode="cover"
+										/>
+									</StyledView>
+								</StyledView>
+							</StyledTouchableOpacity>
+						))}
 					</StyledView>
 				)}
 			</StyledScrollView>

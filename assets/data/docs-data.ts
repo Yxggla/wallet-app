@@ -10,13 +10,19 @@ interface Task {
 	id: number;
 	title: string;
 	description: string;
-}
+	reward: string;
+	daysLeft?: number;
+  }
 interface HotApp {
 	id: number;
 	name: string;
 	category: string;
 	icon: string;
 }
+interface KnowledgeCard {
+	id: number;
+	title: string;
+  }
 
 const hotApps: HotApp[] = [
 	{
@@ -63,11 +69,29 @@ const tokens: Token[] = [
 	{ id: 10, name: "Binance Coin", symbol: "BNB", value: 320.45, oneDayValue: 315.20, icon: "⚛️" }
   ];
 
-const tasks: Task[] = [
-	{ id: 1, title: "每日签到", description: "完成每日签到获得奖励" },
-	{ id: 2, title: "邀请好友", description: "邀请好友获得额外奖励" },
-	// ... 更多任务
-];
+  const tasks: Task[] = [
+	{
+	  id: 1,
+	  title: "铸造照片或视频收藏品",
+	  description: "尝试我们全新的铸造功能！将照片或视频铸造成 Solana 收藏品，完成此任务并解锁一款纪念版 Phantom 收藏品。",
+	  reward: "Solana Phantom 收藏品",
+	  daysLeft: 97
+	},
+	{
+	  id: 2,
+	  title: "Convert to JitoSOL to earn rewards",
+	  description: "Earn a commemorative Phantom NFT and JTO rewards when you convert your native staked SOL to JitoSOL.",
+	  reward: "Phantom NFT + JTO",
+	  daysLeft: 30
+	},
+	{
+		id: 3,
+		title: "参与 Jupiter 交易赢大奖",
+		description: "在 Jupiter 上完成一笔不少于 10 SOL 的代币兑换交易，即可获得 JUP 代币空投资格和限量版 NFT。",
+		reward: "JUP 代币 + NFT",
+		daysLeft: 56
+	  }
+  ];
 
 const dapps = [
 	{
@@ -147,10 +171,33 @@ const formatNumber = (num: number): string => {
 	}
 	return num.toFixed(2);
   };
+
+  const knowledgeCards: KnowledgeCard[] = [
+	{
+	  id: 1,
+	  title: "What is an embedded wallet?",
+	},
+	{
+	  id: 2,
+	  title: "What is a crypto bridge?",
+	},
+	{
+	  id: 3,
+	  title: "What is Staking?",
+	},
+	{
+	  id: 4,
+	  title: "What is DeFi?",
+	},
+	{
+	  id: 5,
+	  title: "What is NFT?",
+	}
+  ];
 export {
 	dapps,
 	tokens,
 	tasks,
 	categories,
 	hotApps,
-	popularOptions, networkOptions, volumeOptions ,formatNumber};
+	popularOptions, networkOptions, volumeOptions ,formatNumber, knowledgeCards};
