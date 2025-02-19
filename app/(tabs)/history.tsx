@@ -1,127 +1,351 @@
-import { StyleSheet, Image, Platform } from "react-native";
+import {
+	ScrollView,
+	TouchableOpacity,
+	View,
+	Text,
+	Image,
+	Linking,
+	Modal,
+} from "react-native";
 
 import { Collapsible } from "@/components/Collapsible";
 import { ExternalLink } from "@/components/ExternalLink";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import React, { useState } from "react";
+import { styled } from "nativewind";
+
+const StyledView = styled(View);
+const StyledText = styled(Text);
+const StyledSafeAreaView = styled(SafeAreaView);
+const StyledScrollView = styled(ScrollView);
+const StyledTouchableOpacity = styled(TouchableOpacity);
 
 export default function HistoryScreen() {
-	return (
-		<ParallaxScrollView
-			headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-			headerImage={
-				<IconSymbol
-					size={310}
-					color="#808080"
-					name="chevron.left.forwardslash.chevron.right"
-					style={styles.headerImage}
-				/>
+	interface Transaction {
+		id: string;
+		type: "received" | "swap" | "sent";
+		status: string;
+		amount: string;
+		token: string;
+		fromTo?: string;
+		date: string;
+		tokenChange?: {
+			received: string;
+			sent: string;
+		};
+		tokenIcon?: string;
+	}
+	const transactions: Transaction[] = [
+		{
+			id: "1",
+			type: "swap",
+			status: "已兑换",
+			amount: "25.8",
+			token: "STREAM",
+			date: "Dec 17, 2024",
+			tokenChange: {
+				received: "+25.8 sSTREAM",
+				sent: "-25.8 STREAM",
+			},
+			tokenIcon: "https://app.streamflow.finance/icon/favicon.ico",
+		},
+		{
+			id: "2",
+			type: "received",
+			status: "已接收",
+			amount: "+0.009",
+			token: "SOL",
+			fromTo: "从 BSck...Yr1C",
+			date: "Dec 17, 2024",
+			tokenIcon:
+				"https://assets.coingecko.com/coins/images/4128/large/solana.png",
+		},
+		{
+			id: "3",
+			type: "sent",
+			status: "已发送",
+			amount: "-0.14517",
+			token: "SOL",
+			fromTo: "到 A719...5XJZ",
+			date: "Oct 16, 2024",
+			tokenIcon:
+				"https://assets.coingecko.com/coins/images/4128/large/solana.png",
+		},
+		{
+			id: "4",
+			type: "sent",
+			status: "已发送",
+			amount: "-0.14517",
+			token: "SOL",
+			fromTo: "到 A719...5XJZ",
+			date: "Oct 16, 2024",
+			tokenIcon:
+				"https://assets.coingecko.com/coins/images/4128/large/solana.png",
+		},
+		{
+			id: "5",
+			type: "swap",
+			status: "已兑换",
+			amount: "25.7",
+			token: "USDT",
+			date: "Oct 16, 2024",
+			tokenChange: {
+				received: "+25.7 USDT",
+				sent: "-25.8 USDC",
+			},
+			tokenIcon:
+				"https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
+		},
+		{
+			id: "6",
+			type: "swap",
+			status: "已兑换",
+			amount: "25.7",
+			token: "USDT",
+			date: "Oct 16, 2024",
+			tokenChange: {
+				received: "+25.7 USDT",
+				sent: "-25.8 USDC",
+			},
+			tokenIcon:
+				"https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
+		},
+		{
+			id: "7",
+			type: "swap",
+			status: "已兑换",
+			amount: "25.7",
+			token: "USDT",
+			date: "Oct 16, 2024",
+			tokenChange: {
+				received: "+25.7 USDT",
+				sent: "-25.8 USDC",
+			},
+			tokenIcon:
+				"https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
+		},
+	];
+	const getStatusIcon = (type: string) => {
+		switch (type) {
+			case "received":
+				return "⬇️";
+			case "swap":
+				return "🔄";
+			case "sent":
+				return "➡️";
+			default:
+				return "❓";
+		}
+	};
+	const getAmountColor = (type: string) => {
+		switch (type) {
+			case "received":
+				return "text-green-500";
+
+			default:
+				return "text-white";
+		}
+	};
+	const groupTransactionsByDate = (transactions: Transaction[]) => {
+		const groups: { [key: string]: Transaction[] } = {};
+
+		for (const tx of transactions) {
+			if (!groups[tx.date]) {
+				groups[tx.date] = [];
 			}
-		>
-			<ThemedView style={styles.titleContainer}>
-				<ThemedText type="title">HistoryScreen</ThemedText>
-			</ThemedView>
-			<ThemedText>HistoryScreen</ThemedText>
-			<Collapsible title="File-based routing">
-				<ThemedText>
-					This app has two screens:{" "}
-					<ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-					and{" "}
-					<ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-				</ThemedText>
-				<ThemedText>
-					The layout file in{" "}
-					<ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{" "}
-					sets up the tab navigator.
-				</ThemedText>
-				<ExternalLink href="https://docs.expo.dev/router/introduction">
-					<ThemedText type="link">Learn more</ThemedText>
-				</ExternalLink>
-			</Collapsible>
-			<Collapsible title="Android, iOS, and web support">
-				<ThemedText>
-					You can open this project on Android, iOS, and the web. To open the
-					web version, press <ThemedText type="defaultSemiBold">w</ThemedText>{" "}
-					in the terminal running this project.
-				</ThemedText>
-			</Collapsible>
-			<Collapsible title="Images">
-				<ThemedText>
-					For static images, you can use the{" "}
-					<ThemedText type="defaultSemiBold">@2x</ThemedText> and{" "}
-					<ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to
-					provide files for different screen densities
-				</ThemedText>
-				<Image
-					source={require("@/assets/images/react-logo.png")}
-					style={{ alignSelf: "center" }}
-				/>
-				<ExternalLink href="https://reactnative.dev/docs/images">
-					<ThemedText type="link">Learn more</ThemedText>
-				</ExternalLink>
-			</Collapsible>
-			<Collapsible title="Custom fonts">
-				<ThemedText>
-					Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText>{" "}
-					to see how to load{" "}
-					<ThemedText style={{ fontFamily: "SpaceMono" }}>
-						custom fonts such as this one.
-					</ThemedText>
-				</ThemedText>
-				<ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-					<ThemedText type="link">Learn more</ThemedText>
-				</ExternalLink>
-			</Collapsible>
-			<Collapsible title="Light and dark mode components">
-				<ThemedText>
-					This template has light and dark mode support. The{" "}
-					<ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook
-					lets you inspect what the user's current color scheme is, and so you
-					can adjust UI colors accordingly.
-				</ThemedText>
-				<ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-					<ThemedText type="link">Learn more</ThemedText>
-				</ExternalLink>
-			</Collapsible>
-			<Collapsible title="Animations">
-				<ThemedText>
-					This template includes an example of an animated component. The{" "}
-					<ThemedText type="defaultSemiBold">
-						components/HelloWave.tsx
-					</ThemedText>{" "}
-					component uses the powerful{" "}
-					<ThemedText type="defaultSemiBold">
-						react-native-reanimated
-					</ThemedText>{" "}
-					library to create a waving hand animation.
-				</ThemedText>
-				{Platform.select({
-					ios: (
-						<ThemedText>
-							The{" "}
-							<ThemedText type="defaultSemiBold">
-								components/ParallaxScrollView.tsx
-							</ThemedText>{" "}
-							component provides a parallax effect for the header image.
-						</ThemedText>
+			groups[tx.date].push(tx);
+		}
+
+		return groups;
+	};
+	const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
+	const TransactionDetailModal = ({
+		tx,
+		visible,
+		onClose,
+	}: {
+		tx: Transaction | null;
+		visible: boolean;
+		onClose: () => void;
+	}) => {
+		if (!tx) return null;
+
+		return (
+			<Modal
+				visible={visible}
+				animationType="slide"
+				transparent={true}
+				onRequestClose={onClose}
+			>
+				<StyledView className="flex-1 bg-black/80 justify-end">
+					<StyledView className="bg-[#1C1D1F] rounded-t-3xl h-[85%]">
+						{/* 头部 */}
+						<StyledView className="flex-row items-center justify-between p-4">
+							<StyledTouchableOpacity onPress={onClose}>
+								<StyledText className="text-white text-2xl">×</StyledText>
+							</StyledTouchableOpacity>
+							<StyledText className="text-white text-lg font-medium">
+								{tx.status}
+							</StyledText>
+							<StyledView className="w-8" />
+						</StyledView>
+
+						{/* 图标和金额 */}
+						<StyledView className="items-center py-8">
+							{/* 状态图标 */}
+							<StyledView className="w-16 h-16 rounded-full bg-[#35363A] items-center justify-center mb-4">
+								<Image
+									source={{ uri: tx.tokenIcon }}
+									resizeMode="contain"
+									className="w-full h-full"
+								/>
+								{/* 状态图标 - 右下角小图标 */}
+								<StyledView className="absolute bottom-[-4px] right-[-4px] w-5 h-5  items-center justify-center">
+									<StyledText className="text-xs">
+										{getStatusIcon(tx.type)}
+									</StyledText>
+								</StyledView>
+							</StyledView>
+							<StyledText className="text-green-500 text-4xl font-medium">
+								{tx.amount} {tx.token}
+							</StyledText>
+						</StyledView>
+
+						{/* 详情列表 */}
+						<StyledView className="mx-4 bg-[#2A2B2D] rounded-xl overflow-hidden">
+							<StyledView className="p-4 border-b border-gray-700">
+								<StyledText className="text-[#687076]">日期</StyledText>
+								<StyledText className="text-white mt-1">
+									{tx.date}, 9:59 pm
+								</StyledText>
+							</StyledView>
+
+							<StyledView className="p-4 border-b border-gray-700">
+								<StyledText className="text-[#687076]">状态</StyledText>
+								<StyledText className="text-green-500 mt-1">成功</StyledText>
+							</StyledView>
+
+							<StyledView className="p-4 border-b border-gray-700">
+								<StyledText className="text-[#687076]">从</StyledText>
+								<StyledText className="text-white mt-1">
+									{tx.fromTo?.replace("从 ", "") || "未知"}
+								</StyledText>
+							</StyledView>
+
+							<StyledView className="p-4">
+								<StyledText className="text-[#687076]">网络</StyledText>
+								<StyledText className="text-white mt-1">Solana</StyledText>
+							</StyledView>
+						</StyledView>
+
+						{/* 底部按钮 */}
+						<StyledView className="absolute bottom-8 left-4 right-4">
+							<StyledTouchableOpacity
+								className="bg-[#7A3EE8] rounded-xl p-4"
+								onPress={() => {
+									const url =
+										"https://solscan.io/tx/hVDYLxWkobxT37AsVmAyaYwX7sntYnak1Zhh8ncAWyvDFbqRX8hSHbXEjcpspo3hwX5m4JyVbgeCcGGZPpeiYcn";
+									Linking.openURL(url);
+								}}
+							>
+								<StyledText className="text-white text-center">
+									在 Solscan 上查看
+								</StyledText>
+							</StyledTouchableOpacity>
+						</StyledView>
+					</StyledView>
+				</StyledView>
+			</Modal>
+		);
+	};
+	return (
+		<StyledSafeAreaView className="flex-1 bg-[#1C1D1F]">
+			<StyledView className="bg-[#1C1D1F] px-4 ">
+				<StyledText className="text-white text-lg font-medium py-4 text-center">
+					最近交易记录
+				</StyledText>
+			</StyledView>
+			<StyledScrollView
+				className="flex-1 bg-[#1C1D1F] px-4"
+				contentContainerStyle={{ paddingBottom: 50 }}
+			>
+				{Object.entries(groupTransactionsByDate(transactions)).map(
+					([date, txs]) => (
+						<StyledView key={date} className="mb-4">
+							{/* 日期分隔 */}
+							<StyledText className="text-[#687076] text-lg mb-2">
+								{date}
+							</StyledText>
+
+							{/* 该日期下的所有交易 */}
+							{txs.map((tx) => (
+								<StyledTouchableOpacity
+									key={tx.id}
+									className="mb-4"
+									onPress={() => setSelectedTx(tx)}
+								>
+									{/* 交易卡片 */}
+									<StyledView className="bg-[#2A2B2D] rounded-xl p-4">
+										<StyledView className="flex-row items-center">
+											{/* 状态图标 */}
+											<StyledView className="w-10 h-10 rounded-full bg-[#35363A] items-center justify-center mr-3">
+												<Image
+													source={{ uri: tx.tokenIcon }}
+													resizeMode="contain"
+													className="w-full h-full"
+												/>
+												{/* 状态图标 - 右下角小图标 */}
+												<StyledView className="absolute bottom-[-4px] right-[-4px] w-5 h-5  items-center justify-center">
+													<StyledText className="text-xs">
+														{getStatusIcon(tx.type)}
+													</StyledText>
+												</StyledView>
+											</StyledView>
+
+											{/* 交易信息 */}
+											<StyledView className="flex-1">
+												<StyledText className="text-white text-base">
+													{tx.status}
+												</StyledText>
+												<StyledText className="text-[#687076] text-sm">
+													{tx.fromTo || "未知"}
+												</StyledText>
+											</StyledView>
+
+											{/* 金额信息 */}
+											<StyledView className="items-end">
+												{tx.tokenChange ? (
+													<>
+														<StyledText className="text-green-500">
+															{tx.tokenChange.received}
+														</StyledText>
+														<StyledText className="text-white">
+															{tx.tokenChange.sent}
+														</StyledText>
+													</>
+												) : (
+													<StyledText className={getAmountColor(tx.type)}>
+														{tx.amount} {tx.token}
+													</StyledText>
+												)}
+											</StyledView>
+										</StyledView>
+									</StyledView>
+								</StyledTouchableOpacity>
+							))}
+						</StyledView>
 					),
-				})}
-			</Collapsible>
-		</ParallaxScrollView>
+				)}
+			</StyledScrollView>
+			<TransactionDetailModal
+				tx={selectedTx}
+				visible={!!selectedTx}
+				onClose={() => setSelectedTx(null)}
+			/>
+		</StyledSafeAreaView>
 	);
 }
-
-const styles = StyleSheet.create({
-	headerImage: {
-		color: "#808080",
-		bottom: -90,
-		left: -35,
-		position: "absolute",
-	},
-	titleContainer: {
-		flexDirection: "row",
-		gap: 8,
-	},
-});
